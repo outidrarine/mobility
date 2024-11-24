@@ -3,10 +3,10 @@ spring:
     gateway:
         routes:
           - id: r1
-            uri: http://localhost:8081
+            uri: lb://USER-SERVICE
             predicates:
               - Path=/api/userEntities/**
           - id : r2
-            uri: http://localhost:8082
+            uri: lb://ACHAT-SERVICE
             predicates:
               - Path=/api/achats/**

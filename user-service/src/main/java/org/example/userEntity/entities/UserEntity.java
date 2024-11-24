@@ -1,10 +1,10 @@
 package org.example.userEntity.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.example.userEntity.model.Achat;
+
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -17,4 +17,8 @@ public class UserEntity {
     private Long id;
     private String name;
     private String email;
+
+    @Transient
+    private List<Achat> achatList;
+
 }

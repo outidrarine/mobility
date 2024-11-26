@@ -8,9 +8,9 @@ import java.util.Map;
 
 @RestController
 public class UserConfigTest {
-    @Value("${global.params.x}")
+    @Value("${user.params.x}")
     private String x;
-    @Value("${global.params.y}")
+    @Value("${user.params.y}")
     private String y;
 
     @GetMapping("/testconfig")

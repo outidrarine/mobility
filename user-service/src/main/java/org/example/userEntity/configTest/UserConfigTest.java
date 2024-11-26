@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
+@RefreshScope
 public class UserConfigTest {
     @Value("${user.params.x}")
     private String x;

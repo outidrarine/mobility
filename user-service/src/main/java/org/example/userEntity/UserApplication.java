@@ -16,7 +16,7 @@ import java.util.Collection;
 
 @SpringBootApplication
 @EnableFeignClients
-@EnableConfigurationProperties(UserConfigTest.class)
+//@EnableConfigurationProperties(UserConfigTest.class)
 public class UserApplication {
 
     public static void main(String[] args) {

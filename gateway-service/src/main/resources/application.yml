@@ -10,3 +10,13 @@ spring:
             uri: lb://ACHAT-SERVICE
             predicates:
               - Path=/api/achats/**
+        globalcors:
+          cors-configurations:
+            '[/**]':
+              allowedOrigins: "*"
+              allowedMethods:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+              allowedHeaders: "*"

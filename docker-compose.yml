@@ -68,3 +68,10 @@ services:
     depends_on:
       mobiliy-user-service:
         condition: service_healthy
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - '80:80'
+    expose:
+      - '80'

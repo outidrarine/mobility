@@ -44,7 +44,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("*")); // Allow all methods (GET, POST, etc.)
         configuration.setAllowedHeaders(Arrays.asList("*")); // Allow all headers
         configuration.setExposedHeaders(Arrays.asList("*")); // Expose all headers
-        configuration.setAllowCredentials(false); // Avoid using credentials with '*'
+        //configuration.setAllowCredentials(false); // Avoid using credentials with '*'
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

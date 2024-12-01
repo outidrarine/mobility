@@ -28,7 +28,9 @@ public class AchatServiceApplication {
 					.prix(100)
 					.build());
 
+			/*
 			achatRepository.findAll().forEach(a-> {
+			 *
 				System.out.println(a.getPrix());
 				System.out.println(a.getId());
 				System.out.println(a.getObjet());
@@ -36,6 +38,8 @@ public class AchatServiceApplication {
 
 			System.out.println("test");
 			System.out.println(userRestClient.getUserById(1L).getEmail());
+			*/
+
 		};
 	}
 

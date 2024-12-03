@@ -75,3 +75,5 @@ services:
       - '80:80'
     expose:
       - '80'
+    environment:
+      - API_ACHATS_URL=http://localhost:8888/api/achats

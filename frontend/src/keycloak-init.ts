@@ -4,7 +4,7 @@ export function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
     keycloak.init({
       config: {
-        url: 'http://kfmd.dev.klee.lan.net:8080',
+        url: 'http://kfmd.dev.klee.lan.net:8080/',
         realm: 'mobility-realm',
         clientId: 'mobility-client'
       },

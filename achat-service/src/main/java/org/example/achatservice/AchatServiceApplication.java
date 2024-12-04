@@ -22,7 +22,6 @@ public class AchatServiceApplication {
 	CommandLineRunner commandLineRunner(AchatRepository achatRepository, UserRestClient userRestClient){
 		return args -> {
 			achatRepository.save(Achat.builder()
-					.id(UUID.randomUUID().toString())
 					.objet("vélo")
 					.userid("1L")
 					.prix(100)

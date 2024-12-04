@@ -1,15 +1,13 @@
 package org.example.achatservice.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.*;
 import org.example.achatservice.model.User;
 
 @Entity
 @NoArgsConstructor @AllArgsConstructor @Getter @Setter @Builder
 public class Achat {
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String objet;
     private double prix;

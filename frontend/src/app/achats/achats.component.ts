@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {NgForOf} from "@angular/common";
 import {Router} from "@angular/router";
+import {AchatService} from "../service/achat.service";
+import {Observable} from "rxjs";
+import {Achat} from "../model/achat.model";
 
 @Component({
   selector: 'app-achats',
@@ -15,7 +18,7 @@ import {Router} from "@angular/router";
 })
 export class AchatsComponent implements OnInit{
   achats: any[] = [];
-  constructor(private http:HttpClient, private router:Router) {
+  constructor(private http:HttpClient, private router:Router, private achatservice:AchatService) {
   }
   ngOnInit(): void {
     this.http.get("http://localhost:8888/api/achats")

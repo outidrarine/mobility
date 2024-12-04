@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {NgForOf} from "@angular/common";
 import {Router} from "@angular/router";
 import {AchatService} from "../service/achat.service";
@@ -10,18 +10,17 @@ import {Achat} from "../model/achat.model";
   selector: 'app-achats',
   standalone: true,
   imports: [
-    NgForOf,
-    HttpClientModule
+    NgForOf
   ],
   templateUrl: './achats.component.html',
   styleUrl: './achats.component.css'
 })
 export class AchatsComponent implements OnInit{
-  achats: any[] = [];
+  achats: Achat[] = [];
   constructor(private http:HttpClient, private router:Router, private achatservice:AchatService) {
   }
   ngOnInit(): void {
-    this.http.get("http://localhost:8888/api/achats")
+    this.http.get<Achat>("http://localhost:8888/api/achats")
       .subscribe({
         next: (data:any) =>{
           console.log("test", data);

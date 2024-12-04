@@ -7,15 +7,14 @@
       <table class="table">
         <thead>
         <tr>
-          <th>ID</th><th>Objet</th><th>userid</th><th>prix</th>
+          <th>Objet</th><th>prix</th><th>valide</th>
         </tr>
         </thead>
         <tbody>
           <tr *ngFor="let a of achats">
-            <td>{{a.id}}</td>
             <td>{{a.objet}}</td>
-            <td>{{a.userid}}</td>
-            <td>{{a.userid}}</td>
+            <td>{{a.prix}}</td>
+            <td>{{a.valide}}</td>
           </tr>
         </tbody>
       </table>

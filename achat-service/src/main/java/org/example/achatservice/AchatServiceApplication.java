@@ -18,28 +18,5 @@ public class AchatServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AchatServiceApplication.class, args);
 	}
-	@Bean
-	CommandLineRunner commandLineRunner(AchatRepository achatRepository, UserRestClient userRestClient){
-		return args -> {
-			achatRepository.save(Achat.builder()
-					.objet("vélo")
-					.userid("1L")
-					.prix(100)
-					.build());
-
-			/*
-			achatRepository.findAll().forEach(a-> {
-			 *
-				System.out.println(a.getPrix());
-				System.out.println(a.getId());
-				System.out.println(a.getObjet());
-			});
-
-			System.out.println("test");
-			System.out.println(userRestClient.getUserById(1L).getEmail());
-			*/
-
-		};
-	}
 
 }

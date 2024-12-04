@@ -18,7 +18,7 @@ public class AchatsRestController {
     public Achat getAchatById(@PathVariable String id ){
 
         Achat achat = achatRepository.findById(id).get();
-        achat.setUser(userRestClient.getUserById(achat.getUserid()));
+        //achat.setUser(userRestClient.getUserById(achat.getUserid()));
         return achat;
     }
 }

@@ -13,6 +13,8 @@ public class Achat {
     private String id;
     private String objet;
     private double prix;
-    private Long userid;
+    private String userid;
+    private String usermail;
+    private boolean valide;
     @Transient private User user;
 }

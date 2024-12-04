@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {NgForOf} from "@angular/common";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-achats',
@@ -14,7 +15,7 @@ import {NgForOf} from "@angular/common";
 })
 export class AchatsComponent implements OnInit{
   achats: any[] = [];
-  constructor(private http:HttpClient) {
+  constructor(private http:HttpClient, private router:Router) {
   }
   ngOnInit(): void {
     this.http.get("http://localhost:8888/api/achats")
@@ -29,4 +30,7 @@ export class AchatsComponent implements OnInit{
       })
   }
 
+  handleNouveauAchat() {
+    this.router.navigateByUrl("/newAchat");
+  }
 }

@@ -24,7 +24,7 @@ public class AchatServiceApplication {
 			achatRepository.save(Achat.builder()
 					.id(UUID.randomUUID().toString())
 					.objet("vélo")
-					.userid(1L)
+					.userid("1L")
 					.prix(100)
 					.build());
 

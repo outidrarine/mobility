@@ -8,6 +8,7 @@ export function initializeKeycloak(keycloak: KeycloakService) {
         realm: 'mobility-realm',
         clientId: 'mobility-client'
       },
+      loadUserProfileAtStartUp: true,
       initOptions: {
         onLoad: 'check-sso',
         silentCheckSsoRedirectUri:

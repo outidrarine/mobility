@@ -13,6 +13,6 @@ public class Achat {
     private double prix;
     private String userid;
     private String usermail;
-    private boolean valide;
+    private Boolean valide;
     @Transient private User user;
 }

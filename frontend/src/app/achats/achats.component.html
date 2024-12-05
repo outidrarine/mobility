@@ -1,20 +1,34 @@
 <div class="p-3">
   <div class="card">
-    <div class="card-body" >
+    <div class="card-body">
       <nav>
         <button (click)="handleNouveauAchat()">Nouveau</button>
       </nav>
       <table class="table">
         <thead>
-        <tr>
-          <th>Objet</th><th>prix</th><th>valide</th>
-        </tr>
+          <tr>
+            <th>Objet</th>
+            <th>prix</th>
+            <th>valide</th>
+            <th>editer</th>
+            <th>supprimer</th>
+          </tr>
         </thead>
         <tbody>
           <tr *ngFor="let a of achats">
-            <td>{{a.objet}}</td>
-            <td>{{a.prix}}</td>
-            <td>{{a.valide}}</td>
+            <td>{{ a.objet }}</td>
+            <td>{{ a.prix }}</td>
+            <td>{{ a.valide ?? 'En attente' }}</td>
+            <td>
+              <button class="btn btn-info" (click)="onEdit(a)">
+                <span class="bi bi-pen"></span>
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-danger" (click)="onDelete(a)">
+                <span class="bi bi-trash"></span>
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>

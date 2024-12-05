@@ -17,13 +17,15 @@ import {Achat} from "../model/achat.model";
 })
 export class AchatsComponent implements OnInit{
   achats: Achat[] = [];
-  constructor(private http:HttpClient, private router:Router, private achatservice:AchatService) {
+  constructor(private router:Router, private achatservice:AchatService) {
   }
   ngOnInit(): void {
-    this.http.get<Achat>("http://localhost:8888/api/achats")
+    this.getAchats();
+  }
+  getAchats(){
+    this.achatservice.getAchats()
       .subscribe({
         next: (data:any) =>{
-          console.log("test", data);
           this.achats = data._embedded?.achats || []
         },
         error : err =>{
@@ -34,5 +36,16 @@ export class AchatsComponent implements OnInit{
 
   handleNouveauAchat() {
     this.router.navigateByUrl("/newAchat");
+  }
+
+  onEdit(achat: Achat) {
+    this.router.navigateByUrl("/editAchat/"+achat.id);
+  }
+
+  onDelete(achat: Achat) {
+    this.achatservice.deleteAchat(achat).subscribe(data=>{
+      this.getAchats();
+    })
+
   }
 }

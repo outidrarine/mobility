@@ -6,12 +6,14 @@ import {Router} from "@angular/router";
 import {UploadFileService} from "../service/upload-file.service";
 import {Achat} from "../model/achat.model";
 import { v4 as uuidv4 } from 'uuid';
+import {formatNumber, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-form-achat',
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    NgIf,
   ],
   templateUrl: './form-achat.component.html',
   styleUrl: './form-achat.component.css'
@@ -21,15 +23,15 @@ export class FormAchatComponent implements OnInit{
   userId!: string;
   userEmail!: string;
   selectedFile: File | null = null;
-  private fileName!: string;
 
   constructor(private uploadservice: UploadFileService, private fb:FormBuilder, private achatservice:AchatService, private keycloakService:KeycloakService, private router:Router) {
   }
 
   ngOnInit(): void {
     this.achatFormGroup=this.fb.group({
-      objet:this.fb.control(null, [Validators.required, Validators.minLength(4)]),
-      prix:this.fb.control(null, [Validators.required, Validators.minLength(2)])
+      objet:this.fb.control(null, [Validators.required]),
+      prix:this.fb.control(null, [Validators.required, Validators.pattern("^[0-9]*$")]),
+      file: this.fb.control('', [Validators.required]),
     });
     this.keycloakService.loadUserProfile().then((profile) => {
       this.userId = profile.id || '';
@@ -71,7 +73,6 @@ export class FormAchatComponent implements OnInit{
 
       this.uploadservice.pushFileToStorage(formData).subscribe((response: any) => {
         this.router.navigateByUrl("/achats")
-        console.log(response);
       });
     }
   }

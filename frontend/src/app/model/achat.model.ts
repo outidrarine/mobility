@@ -6,6 +6,7 @@ export interface Achat{
   usermail:string;
   valide:boolean|undefined;
   justifId:string;
+
 }
 
 export interface PageAchat{

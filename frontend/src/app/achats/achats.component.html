@@ -12,6 +12,7 @@
             <th>valide</th>
             <th>editer</th>
             <th>supprimer</th>
+            <th>afficher</th>
           </tr>
         </thead>
         <tbody>
@@ -27,6 +28,11 @@
             <td>
               <button class="btn btn-danger" (click)="onDelete(a)">
                 <span class="bi bi-trash"></span>
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-info" (click)="onDownload(a)">
+                <span class="bi bi-download"></span>
               </button>
             </td>
           </tr>

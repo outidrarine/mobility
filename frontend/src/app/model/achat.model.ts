@@ -4,7 +4,8 @@ export interface Achat{
   prix:number;
   userid:string;
   usermail:string;
-  valide:boolean;
+  valide:boolean|undefined;
+  justifId:string;
 }
 
 export interface PageAchat{

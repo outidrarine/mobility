@@ -3,8 +3,8 @@ import {HttpClient} from "@angular/common/http";
 import {NgForOf} from "@angular/common";
 import {Router} from "@angular/router";
 import {AchatService} from "../service/achat.service";
-import {Observable} from "rxjs";
 import {Achat} from "../model/achat.model";
+import {saveAs} from 'file-saver'
 
 @Component({
   selector: 'app-achats',
@@ -17,7 +17,7 @@ import {Achat} from "../model/achat.model";
 })
 export class AchatsComponent implements OnInit{
   achats: Achat[] = [];
-  constructor(private router:Router, private achatservice:AchatService) {
+  constructor(private router:Router, private achatservice:AchatService, private http:HttpClient) {
   }
   ngOnInit(): void {
     this.getAchats();
@@ -48,4 +48,19 @@ export class AchatsComponent implements OnInit{
     })
 
   }
+
+  onDownload(a: Achat) {
+    const url = `http://localhost:8082/getfile/${a.userid}/2024/${a.justifId}`;
+
+    this.http.get(url, { responseType: 'blob' }).subscribe({
+      next: (response: Blob) => {
+        saveAs(response, a.justifId); // Automatically downloads the file
+
+      },
+      error: (err) => {
+        console.error('Error downloading file:', err);
+      },
+    });
+  }
+
 }

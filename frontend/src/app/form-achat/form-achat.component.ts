@@ -3,7 +3,9 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {KeycloakService} from "keycloak-angular";
 import {AchatService} from "../service/achat.service";
 import {Router} from "@angular/router";
-import {routes} from "../app.routes";
+import {UploadFileService} from "../service/upload-file.service";
+import {Achat} from "../model/achat.model";
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-form-achat',
@@ -18,8 +20,10 @@ export class FormAchatComponent implements OnInit{
   achatFormGroup! : FormGroup;
   userId!: string;
   userEmail!: string;
+  selectedFile: File | null = null;
+  private fileName!: string;
 
-  constructor(private fb:FormBuilder, private achatservice:AchatService, private keycloakService:KeycloakService, private router:Router) {
+  constructor(private uploadservice: UploadFileService, private fb:FormBuilder, private achatservice:AchatService, private keycloakService:KeycloakService, private router:Router) {
   }
 
   ngOnInit(): void {
@@ -34,15 +38,41 @@ export class FormAchatComponent implements OnInit{
   }
 
   handleAddAchat() {
+    this.postAchat();
+  }
+  postAchat(){
+    const fileExtension = this.selectedFile?.name.split('.').pop();
+    const newUUID = uuidv4();
     const achatData = {
       ...this.achatFormGroup.value,
       userid: this.userId,
-      usermail: this.userEmail
+      usermail: this.userEmail,
+      justifId:`${newUUID}.${fileExtension}`
     };
 
     this.achatservice.saveAchat(achatData).subscribe(d => {
-      this.router
-      this.router.navigateByUrl("/achats")
+      this.onSubmit(d);
     });
+  }
+  onFileSelected(event: Event) {
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files.length > 0) {
+      this.selectedFile = fileInput.files[0];
+    }
+  }
+  onSubmit(saisie:Achat) {
+    if (this.selectedFile) {
+      const formData = new FormData();
+      formData.append('file', this.selectedFile);
+      formData.append('userId', this.userId);
+      const annee= new Date().getFullYear();
+      formData.append('year',  annee.toString());
+      formData.append('justifId', saisie.justifId)
+
+      this.uploadservice.pushFileToStorage(formData).subscribe((response: any) => {
+        this.router.navigateByUrl("/achats")
+        console.log(response);
+      });
+    }
   }
 }

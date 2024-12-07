@@ -1,0 +1,18 @@
+.user-form {
+  margin: 2rem auto;
+  padding: 1.5rem;
+}
+
+.field {
+  margin-bottom: 1.5rem;
+}
+
+.p-error {
+  color: #f44336;
+  font-size: 0.85rem;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

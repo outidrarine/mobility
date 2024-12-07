@@ -6,11 +6,18 @@ import {Router} from "@angular/router";
 import {UploadFileService} from "../service/upload-file.service";
 import {Achat} from "../model/achat.model";
 import { v4 as uuidv4 } from 'uuid';
-import { NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {InputTextModule} from "primeng/inputtext";
 import {MultiSelectModule} from "primeng/multiselect";
 import {PaginatorModule} from "primeng/paginator";
 import {ListboxModule} from "primeng/listbox";
+import {CardModule} from "primeng/card";
+import {BadgeModule} from "primeng/badge";
+import {Button} from "primeng/button";
+import {ToastModule} from "primeng/toast";
+import {FileSelectEvent, FileUploadEvent, FileUploadModule} from "primeng/fileupload";
+import {IconFieldModule} from "primeng/iconfield";
+import {InputIconModule} from "primeng/inputicon";
 
 @Component({
   selector: 'app-form-achat',
@@ -22,7 +29,15 @@ import {ListboxModule} from "primeng/listbox";
     InputTextModule,
     MultiSelectModule,
     PaginatorModule,
-    ListboxModule
+    ListboxModule,
+    CardModule,
+    BadgeModule,
+    Button,
+    ToastModule,
+    FileUploadModule,
+    NgClass,
+    IconFieldModule,
+    InputIconModule
   ],
   templateUrl: './form-achat.component.html',
   styleUrl: './form-achat.component.css'
@@ -31,9 +46,10 @@ export class FormAchatComponent implements OnInit{
   achatFormGroup! : FormGroup;
   userId!: string;
   userEmail!: string;
-  selectedFile: File | null = null;
   months:string[]=['Janvier','Février','Mars'];
   typesAchats:string[]=['vélo', 'clavier','souris']
+  uploadedFiles: File|null=null;
+  submited:boolean=false;
 
   constructor(private uploadservice: UploadFileService, private fb:FormBuilder, private achatservice:AchatService, private keycloakService:KeycloakService, private router:Router) {
   }
@@ -53,10 +69,15 @@ export class FormAchatComponent implements OnInit{
   }
 
   handleAddAchat() {
-    this.postAchat();
+    if(this.achatFormGroup.valid){
+      this.submited=false;
+      this.postAchat();
+    }else{
+      this.submited=true;
+    }
   }
   postAchat(){
-    const fileExtension = this.selectedFile?.name.split('.').pop();
+    const fileExtension = this.uploadedFiles?.name.split('.').pop();
     const newUUID = uuidv4();
     const achatData = {
       ...this.achatFormGroup.value,
@@ -66,27 +87,34 @@ export class FormAchatComponent implements OnInit{
     };
 
     this.achatservice.saveAchat(achatData).subscribe(d => {
-      this.onSubmit(d);
+      console.log("post achat : ", d)
+      this.submitFile(d);
     });
   }
-  onFileSelected(event: Event) {
-    const fileInput = event.target as HTMLInputElement;
-    if (fileInput.files && fileInput.files.length > 0) {
-      this.selectedFile = fileInput.files[0];
+
+  onFileSelected(event: FileSelectEvent) {
+    if (event.files && event.files.length > 0) {
+      this.uploadedFiles = event.files[0];
     }
   }
-  onSubmit(saisie:Achat) {
-    if (this.selectedFile) {
+
+  submitFile(saisie:Achat) {
+    if (this.uploadedFiles) {
       const formData = new FormData();
-      formData.append('file', this.selectedFile);
+      formData.append('file', this.uploadedFiles);
       formData.append('userId', this.userId);
       const annee= new Date().getFullYear();
       formData.append('year',  annee.toString());
       formData.append('justifId', saisie.justifId)
 
       this.uploadservice.pushFileToStorage(formData).subscribe((response: any) => {
+        console.log("file upload : ",response);
         this.router.navigateByUrl("/achats")
       });
     }
+  }
+
+  onRemoveHandle() {
+    this.uploadedFiles=null;
   }
 }

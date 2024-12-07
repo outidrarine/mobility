@@ -1,55 +1,91 @@
+<p-card   styleClass="user-form" class="flex justify-content-center align-items-center mt-5 ">
+  <div >
+    <h3 class="text-center">Saisie d'un nouvel achat</h3>
 
-<div class="container mt-3 col-md-6 offset-md-3">
-<form [formGroup]="achatFormGroup" >
-  <div class="mb-3 flex flex-column col-3">
-    <label class="form-label">Objet</label>
-    <input pInputText  type="text" formControlName="objet" class="form-control">
-    <div *ngIf="achatFormGroup.get('objet')?.invalid && achatFormGroup.get('objet')?.touched" class="alert alert-danger mt-2 py-1">
-      <div *ngIf="achatFormGroup.get('objet')?.errors?.['required']" >L'objet de l'achat est obligatoire.</div>
-    </div>
   </div>
-  <div class="mb-3 flex flex-column col-3">
-    <label class="form-label">prix</label>
-    <input pInputText type="text" id="prix" name="prix" formControlName="prix" class="form-control">
-    <div *ngIf="achatFormGroup.get('prix')?.invalid && achatFormGroup.get('prix')?.touched" class="alert alert-danger mt-2 py-1">
-      <div *ngIf="achatFormGroup.get('prix')?.errors?.['required']" >Le prix est obligatoire.</div>
-      <div *ngIf="achatFormGroup.get('prix')?.errors?.['pattern']" >Le prix doit être un chiffre.</div>
+  <form [formGroup]="achatFormGroup" novalidate class=" p-5">
+    <!-- Objet Field -->
+    <div class="field">
+      <label for="objet" class="block font-bold mb-2">Objet</label>
+      <input pInputText type="text" id="objet" formControlName="objet" class="w-full">
+      <small *ngIf="submited ||achatFormGroup.get('objet')?.invalid && achatFormGroup.get('objet')?.touched" class="p-error block">
+        <span *ngIf="achatFormGroup.get('objet')?.errors?.['required']">L'objet de l'achat est obligatoire.</span>
+      </small>
     </div>
-  </div>
-  <div class="mb-3 flex flex-column col-3">
-    <label class="form-label">Type Achat</label>
-    <div>
-      <p-listbox
-        formControlName="typeAchat"
-        [options]="typesAchats"
-        [style]="{'width':'15rem'}"
-        [listStyle]="{'max-height': '220px'}" />
-    </div>
-    <div *ngIf="achatFormGroup.get('typeAchat')?.invalid && achatFormGroup.get('typeAchat')?.touched" class="alert alert-danger mt-2 py-1">
-      <div *ngIf="achatFormGroup.get('typeAchat')?.errors?.['required']" >Le type est obligatoire.</div>
-    </div>
-  </div>
-  <div class="mb-3 flex flex-column col-3">
-    <label class="form-label">mois</label>
-    <div>
-      <select id="month" formControlName="mois" class="form-select">
-        <option *ngFor="let month of months" [value]="month">{{ month }}</option>
-      </select>
-    </div>
-    <div *ngIf="achatFormGroup.get('mois')?.invalid && achatFormGroup.get('mois')?.touched" class="alert alert-danger mt-2 py-1">
-      <div *ngIf="achatFormGroup.get('mois')?.errors?.['required']" >Le mois est obligatoire.</div>
-    </div>
-  </div>
-  <div class="mb-3 flex flex-column col-3">
-    <label class="form-label">justificatif</label>
-    <div>
-      <input formControlName="file" type="file" class="btn btn-primary" (change)="onFileSelected($event)" style="margin-left: 10px" >
-    </div>
-    <div *ngIf="achatFormGroup.get('file')?.invalid && achatFormGroup.get('file')?.touched " class="alert alert-danger">
-      <div *ngIf="achatFormGroup.get('file')?.errors?.['required']">File is required.</div>
-    </div>
-  </div>
 
-  <button type="submit" [disabled]="!this.achatFormGroup.valid" (click)="handleAddAchat()" class="btn btn-outline-primary">Save</button>
-</form>
-</div>
+    <!-- Prix Field -->
+    <div class="field">
+      <label for="prix" class="block font-bold mb-2">Prix</label>
+      <input pInputText type="text" id="prix" formControlName="prix" class="w-full">
+      <small *ngIf="submited || achatFormGroup.get('prix')?.invalid && achatFormGroup.get('prix')?.touched" class="p-error block">
+        <span *ngIf="achatFormGroup.get('prix')?.errors?.['required']">Le prix est obligatoire.</span>
+        <span *ngIf="achatFormGroup.get('prix')?.errors?.['pattern']">Le prix doit être un chiffre.</span>
+      </small>
+    </div>
+
+    <!-- Type Achat Field -->
+    <div class="field">
+      <label  class="block font-bold mb-2">Type Achat</label>
+      <p-iconField iconPosition="right">
+        <p-inputIcon styleClass="pi pi-angle-down" />
+        <select  id="type" formControlName="typeAchat" class="p-inputtext w-full">
+          <option *ngFor="let type of typesAchats" [value]="type" >{{ type }}</option>
+        </select>
+      </p-iconField>
+      <small *ngIf="submited ||achatFormGroup.get('typeAchat')?.invalid && achatFormGroup.get('typeAchat')?.touched" class="p-error block">
+        Le type est obligatoire.
+      </small>
+    </div>
+
+    <!-- Mois Field -->
+    <div class="field">
+      <label for="mois" class="block font-bold mb-2">Mois</label>
+      <p-iconField iconPosition="right">
+        <p-inputIcon styleClass="pi pi-angle-down" />
+        <select id="mois" formControlName="mois" class="p-inputtext w-full">
+          <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+        </select>
+      </p-iconField>
+      <small *ngIf="submited ||achatFormGroup.get('mois')?.invalid && achatFormGroup.get('mois')?.touched" class="p-error block">
+        Le mois est obligatoire.
+      </small>
+    </div>
+
+    <!-- Justificatif Field -->
+    <div class="field">
+      <label  class="block font-bold mb-2">Justificatif</label>
+
+      <p-fileUpload
+        showUploadButton="false"
+        (onRemove)="onRemoveHandle()"
+        fileLimit="1"
+        chooseLabel="Choisir"
+        cancelLabel="Annuler"
+        required="true"
+        (onSelect)="onFileSelected($event)"
+        maxFileSize="1000000">
+        <ng-template pTemplate="content">
+          <ul *ngIf="uploadedFiles">
+            <li *ngIf="uploadedFiles">
+              {{ uploadedFiles.name }} - {{ uploadedFiles.size }} bytes
+            </li>
+          </ul>
+        </ng-template>
+      </p-fileUpload>
+      <small *ngIf="submited ||achatFormGroup.get('file')?.invalid && achatFormGroup.get('file')?.touched" class="p-error block">
+        Un justificatif est requis
+
+      </small>
+    </div>
+
+    <!-- Save Button -->
+    <div class="d-flex">
+      <button
+        type="submit"
+        (click)="handleAddAchat()"
+        class="p-button p-component p-button-outlined align-self-center ">
+        Save
+      </button>
+    </div>
+  </form>
+</p-card>

@@ -1,21 +1,46 @@
+
 <div class="container mt-3 col-md-6 offset-md-3">
 <form [formGroup]="achatFormGroup" >
-  <div class="mb-3">
+  <div class="mb-3 flex flex-column col-3">
     <label class="form-label">Objet</label>
-    <input type="text" formControlName="objet" class="form-control">
+    <input pInputText  type="text" formControlName="objet" class="form-control">
     <div *ngIf="achatFormGroup.get('objet')?.invalid && achatFormGroup.get('objet')?.touched" class="alert alert-danger mt-2 py-1">
       <div *ngIf="achatFormGroup.get('objet')?.errors?.['required']" >L'objet de l'achat est obligatoire.</div>
     </div>
   </div>
-  <div class="mb-3">
+  <div class="mb-3 flex flex-column col-3">
     <label class="form-label">prix</label>
-    <input type="text" id="prix" name="prix" formControlName="prix" class="form-control">
+    <input pInputText type="text" id="prix" name="prix" formControlName="prix" class="form-control">
     <div *ngIf="achatFormGroup.get('prix')?.invalid && achatFormGroup.get('prix')?.touched" class="alert alert-danger mt-2 py-1">
       <div *ngIf="achatFormGroup.get('prix')?.errors?.['required']" >Le prix est obligatoire.</div>
       <div *ngIf="achatFormGroup.get('prix')?.errors?.['pattern']" >Le prix doit être un chiffre.</div>
     </div>
   </div>
-  <div class="mb-3">
+  <div class="mb-3 flex flex-column col-3">
+    <label class="form-label">Type Achat</label>
+    <div>
+      <p-listbox
+        formControlName="typeAchat"
+        [options]="typesAchats"
+        [style]="{'width':'15rem'}"
+        [listStyle]="{'max-height': '220px'}" />
+    </div>
+    <div *ngIf="achatFormGroup.get('typeAchat')?.invalid && achatFormGroup.get('typeAchat')?.touched" class="alert alert-danger mt-2 py-1">
+      <div *ngIf="achatFormGroup.get('typeAchat')?.errors?.['required']" >Le type est obligatoire.</div>
+    </div>
+  </div>
+  <div class="mb-3 flex flex-column col-3">
+    <label class="form-label">mois</label>
+    <div>
+      <select id="month" formControlName="mois" class="form-select">
+        <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+      </select>
+    </div>
+    <div *ngIf="achatFormGroup.get('mois')?.invalid && achatFormGroup.get('mois')?.touched" class="alert alert-danger mt-2 py-1">
+      <div *ngIf="achatFormGroup.get('mois')?.errors?.['required']" >Le mois est obligatoire.</div>
+    </div>
+  </div>
+  <div class="mb-3 flex flex-column col-3">
     <label class="form-label">justificatif</label>
     <div>
       <input formControlName="file" type="file" class="btn btn-primary" (change)="onFileSelected($event)" style="margin-left: 10px" >

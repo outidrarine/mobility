@@ -5,12 +5,16 @@ import {Router} from "@angular/router";
 import {AchatService} from "../service/achat.service";
 import {Achat} from "../model/achat.model";
 import {saveAs} from 'file-saver'
+import {ButtonModule} from "primeng/button";
+import {TableModule} from "primeng/table";
 
 @Component({
   selector: 'app-achats',
   standalone: true,
   imports: [
-    NgForOf
+    NgForOf,
+    ButtonModule,
+    TableModule
   ],
   templateUrl: './achats.component.html',
   styleUrl: './achats.component.css'

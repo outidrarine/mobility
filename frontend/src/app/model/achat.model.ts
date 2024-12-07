@@ -6,6 +6,10 @@ export interface Achat{
   usermail:string;
   valide:boolean|undefined;
   justifId:string;
+  dateSaisie: Date;
+  mois:string;
+  type:string;
+  commentaire:string;
 
 }
 

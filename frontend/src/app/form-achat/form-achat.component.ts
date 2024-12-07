@@ -6,7 +6,11 @@ import {Router} from "@angular/router";
 import {UploadFileService} from "../service/upload-file.service";
 import {Achat} from "../model/achat.model";
 import { v4 as uuidv4 } from 'uuid';
-import {formatNumber, NgIf} from "@angular/common";
+import { NgForOf, NgIf} from "@angular/common";
+import {InputTextModule} from "primeng/inputtext";
+import {MultiSelectModule} from "primeng/multiselect";
+import {PaginatorModule} from "primeng/paginator";
+import {ListboxModule} from "primeng/listbox";
 
 @Component({
   selector: 'app-form-achat',
@@ -14,6 +18,11 @@ import {formatNumber, NgIf} from "@angular/common";
   imports: [
     ReactiveFormsModule,
     NgIf,
+    NgForOf,
+    InputTextModule,
+    MultiSelectModule,
+    PaginatorModule,
+    ListboxModule
   ],
   templateUrl: './form-achat.component.html',
   styleUrl: './form-achat.component.css'
@@ -23,6 +32,8 @@ export class FormAchatComponent implements OnInit{
   userId!: string;
   userEmail!: string;
   selectedFile: File | null = null;
+  months:string[]=['Janvier','Février','Mars'];
+  typesAchats:string[]=['vélo', 'clavier','souris']
 
   constructor(private uploadservice: UploadFileService, private fb:FormBuilder, private achatservice:AchatService, private keycloakService:KeycloakService, private router:Router) {
   }
@@ -32,6 +43,8 @@ export class FormAchatComponent implements OnInit{
       objet:this.fb.control(null, [Validators.required]),
       prix:this.fb.control(null, [Validators.required, Validators.pattern("^[0-9]*$")]),
       file: this.fb.control('', [Validators.required]),
+      mois:this.fb.control('',[Validators.required]),
+      typeAchat:this.fb.control('',[Validators.required])
     });
     this.keycloakService.loadUserProfile().then((profile) => {
       this.userId = profile.id || '';

@@ -5,9 +5,10 @@ import { routes } from './app.routes';
 import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
 import {initializeKeycloak} from "../keycloak-init";
 import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
+import {BrowserAnimationsModule, provideAnimations} from "@angular/platform-browser/animations";
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),provideHttpClient(withInterceptorsFromDi()), {
+  providers: [BrowserAnimationsModule, provideAnimations(),  provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),provideHttpClient(withInterceptorsFromDi()), {
     provide: APP_INITIALIZER,
     useFactory: initializeKeycloak,
     deps: [KeycloakService],

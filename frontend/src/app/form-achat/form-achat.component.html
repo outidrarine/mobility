@@ -8,7 +8,7 @@
     <div class="field">
       <label for="objet" class="block font-bold mb-2">Objet</label>
       <input pInputText type="text" id="objet" formControlName="objet" class="w-full">
-      <small *ngIf="submited ||achatFormGroup.get('objet')?.invalid && achatFormGroup.get('objet')?.touched" class="p-error block">
+      <small *ngIf="submited &&achatFormGroup.get('objet')?.invalid " class="p-error block">
         <span *ngIf="achatFormGroup.get('objet')?.errors?.['required']">L'objet de l'achat est obligatoire.</span>
       </small>
     </div>
@@ -17,7 +17,7 @@
     <div class="field">
       <label for="prix" class="block font-bold mb-2">Prix</label>
       <input pInputText type="text" id="prix" formControlName="prix" class="w-full">
-      <small *ngIf="submited || achatFormGroup.get('prix')?.invalid && achatFormGroup.get('prix')?.touched" class="p-error block">
+      <small *ngIf="submited && achatFormGroup.get('prix')?.invalid " class="p-error block">
         <span *ngIf="achatFormGroup.get('prix')?.errors?.['required']">Le prix est obligatoire.</span>
         <span *ngIf="achatFormGroup.get('prix')?.errors?.['pattern']">Le prix doit être un chiffre.</span>
       </small>
@@ -28,11 +28,11 @@
       <label  class="block font-bold mb-2">Type Achat</label>
       <p-iconField iconPosition="right">
         <p-inputIcon styleClass="pi pi-angle-down" />
-        <select  id="type" formControlName="typeAchat" class="p-inputtext w-full">
+        <select  id="type" formControlName="type" class="p-inputtext w-full">
           <option *ngFor="let type of typesAchats" [value]="type" >{{ type }}</option>
         </select>
       </p-iconField>
-      <small *ngIf="submited ||achatFormGroup.get('typeAchat')?.invalid && achatFormGroup.get('typeAchat')?.touched" class="p-error block">
+      <small *ngIf="submited &&achatFormGroup.get('type')?.invalid" class="p-error block">
         Le type est obligatoire.
       </small>
     </div>
@@ -46,7 +46,7 @@
           <option *ngFor="let month of months" [value]="month">{{ month }}</option>
         </select>
       </p-iconField>
-      <small *ngIf="submited ||achatFormGroup.get('mois')?.invalid && achatFormGroup.get('mois')?.touched" class="p-error block">
+      <small *ngIf="submited && achatFormGroup.get('mois')?.invalid" class="p-error block">
         Le mois est obligatoire.
       </small>
     </div>
@@ -65,16 +65,25 @@
         (onSelect)="onFileSelected($event)"
         maxFileSize="1000000">
         <ng-template pTemplate="content">
-          <ul *ngIf="uploadedFiles">
-            <li *ngIf="uploadedFiles">
-              {{ uploadedFiles.name }} - {{ uploadedFiles.size }} bytes
+          <ul *ngIf="uploadedFile">
+            <li *ngIf="uploadedFile">
+              {{ uploadedFile.name }} - {{ uploadedFile.size }} bytes
             </li>
           </ul>
         </ng-template>
       </p-fileUpload>
-      <small *ngIf="submited ||achatFormGroup.get('file')?.invalid && achatFormGroup.get('file')?.touched" class="p-error block">
+      <small *ngIf="submited && achatFormGroup.get('file')?.invalid " class="p-error block">
         Un justificatif est requis
+      </small>
+    </div>
 
+    <!-- Commentaire Field -->
+    <div class="field">
+      <label for="prix" class="block font-bold mb-2">commentaire</label>
+      <textarea  pInputText type="text" id="commentaire" formControlName="commentaire" class="w-full">
+      </textarea>
+      <small *ngIf="submited && achatFormGroup.get('commentaire')?.invalid" class="p-error block">
+        <span *ngIf="achatFormGroup.get('commentaire')?.errors?.['maxlength']">Ne dépassez pas 120 caractère</span>
       </small>
     </div>
 

@@ -7,6 +7,8 @@ import {Achat} from "../model/achat.model";
 import {saveAs} from 'file-saver'
 import {ButtonModule} from "primeng/button";
 import {TableModule} from "primeng/table";
+import {CardModule} from "primeng/card";
+import {TagModule} from "primeng/tag";
 
 @Component({
   selector: 'app-achats',
@@ -14,7 +16,9 @@ import {TableModule} from "primeng/table";
   imports: [
     NgForOf,
     ButtonModule,
-    TableModule
+    TableModule,
+    CardModule,
+    TagModule
   ],
   templateUrl: './achats.component.html',
   styleUrl: './achats.component.css'
@@ -67,4 +71,14 @@ export class AchatsComponent implements OnInit{
     });
   }
 
+  severity(achat:Achat) {
+    switch (achat.valide) {
+      case null||undefined:
+        return 'info';
+      case true:
+        return 'success';
+      case false:
+        return 'danger';
+    }
+  }
 }

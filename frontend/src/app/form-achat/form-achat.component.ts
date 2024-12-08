@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators} from "@angular/forms";
 import {KeycloakService} from "keycloak-angular";
 import {AchatService} from "../service/achat.service";
 import {Router} from "@angular/router";
@@ -48,7 +48,7 @@ export class FormAchatComponent implements OnInit{
   userEmail!: string;
   months:string[]=['Janvier','Février','Mars'];
   typesAchats:string[]=['vélo', 'clavier','souris']
-  uploadedFiles: File|null=null;
+  uploadedFile: File|null=null;
   submited:boolean=false;
 
   constructor(private uploadservice: UploadFileService, private fb:FormBuilder, private achatservice:AchatService, private keycloakService:KeycloakService, private router:Router) {
@@ -60,7 +60,8 @@ export class FormAchatComponent implements OnInit{
       prix:this.fb.control(null, [Validators.required, Validators.pattern("^[0-9]*$")]),
       file: this.fb.control('', [Validators.required]),
       mois:this.fb.control('',[Validators.required]),
-      typeAchat:this.fb.control('',[Validators.required])
+      type:this.fb.control('',[Validators.required]),
+      commentaire:this.fb.control('',[Validators.maxLength(120)])
     });
     this.keycloakService.loadUserProfile().then((profile) => {
       this.userId = profile.id || '';
@@ -69,15 +70,29 @@ export class FormAchatComponent implements OnInit{
   }
 
   handleAddAchat() {
+    console.log(this.achatFormGroup.errors);
+    console.log(this.achatFormGroup.valid);
+    this.getFormValidationErrors()
+
+    this.submited=false;
     if(this.achatFormGroup.valid){
-      this.submited=false;
       this.postAchat();
     }else{
       this.submited=true;
     }
   }
+  getFormValidationErrors() {
+    Object.keys(this.achatFormGroup.controls).forEach(key => {
+      const controlErrors: ValidationErrors | null | undefined = this.achatFormGroup?.get(key)?.errors;
+      if (controlErrors != null) {
+        Object.keys(controlErrors).forEach(keyError => {
+          console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
+        });
+      }
+    });
+  }
   postAchat(){
-    const fileExtension = this.uploadedFiles?.name.split('.').pop();
+    const fileExtension = this.uploadedFile?.name.split('.').pop();
     const newUUID = uuidv4();
     const achatData = {
       ...this.achatFormGroup.value,
@@ -94,14 +109,15 @@ export class FormAchatComponent implements OnInit{
 
   onFileSelected(event: FileSelectEvent) {
     if (event.files && event.files.length > 0) {
-      this.uploadedFiles = event.files[0];
+      this.uploadedFile = event.files[0];
+      this.achatFormGroup.patchValue({file:this.uploadedFile})
     }
   }
 
   submitFile(saisie:Achat) {
-    if (this.uploadedFiles) {
+    if (this.uploadedFile) {
       const formData = new FormData();
-      formData.append('file', this.uploadedFiles);
+      formData.append('file', this.uploadedFile);
       formData.append('userId', this.userId);
       const annee= new Date().getFullYear();
       formData.append('year',  annee.toString());
@@ -115,6 +131,6 @@ export class FormAchatComponent implements OnInit{
   }
 
   onRemoveHandle() {
-    this.uploadedFiles=null;
+    this.uploadedFile=null
   }
 }

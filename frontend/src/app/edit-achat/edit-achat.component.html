@@ -1,3 +1,109 @@
+<p-card *ngIf="achatFormGroup"  styleClass="user-form" class="flex justify-content-center align-items-center mt-5 ">
+  <div >
+    <h3 class="text-center">Modification d'achat : {{achatFormGroup.get('objet')?.value}}</h3>
+
+  </div>
+  <form [formGroup]="achatFormGroup" novalidate class=" p-5">
+    <!-- Objet Field -->
+    <div class="field">
+      <label for="objet" class="block font-bold mb-2">Objet</label>
+      <input pInputText type="text" id="objet" formControlName="objet" class="w-full">
+      <small *ngIf="achatFormGroup.get('objet')?.invalid " class="p-error block">
+        <span *ngIf="achatFormGroup.get('objet')?.errors?.['required']">L'objet de l'achat est obligatoire.</span>
+      </small>
+    </div>
+
+    <!-- Prix Field -->
+    <div class="field">
+      <label for="prix" class="block font-bold mb-2">Prix</label>
+      <input pInputText type="text" id="prix" formControlName="prix" class="w-full">
+      <small *ngIf="achatFormGroup.get('prix')?.invalid " class="p-error block">
+        <span *ngIf="achatFormGroup.get('prix')?.errors?.['required']">Le prix est obligatoire.</span>
+        <span *ngIf="achatFormGroup.get('prix')?.errors?.['pattern']">Le prix doit être un chiffre.</span>
+      </small>
+    </div>
+
+    <!-- Type Achat Field -->
+    <div class="field">
+      <label  class="block font-bold mb-2">Type Achat</label>
+      <p-iconField iconPosition="right">
+        <p-inputIcon styleClass="pi pi-angle-down" />
+        <select  id="type" formControlName="type" class="p-inputtext w-full">
+          <option *ngFor="let type of typesAchats" [value]="type" >{{ type }}</option>
+        </select>
+      </p-iconField>
+      <small *ngIf="achatFormGroup.get('type')?.invalid" class="p-error block">
+        Le type est obligatoire.
+      </small>
+    </div>
+
+    <!-- Mois Field -->
+    <div class="field">
+      <label for="mois" class="block font-bold mb-2">Mois</label>
+      <p-iconField iconPosition="right">
+        <p-inputIcon styleClass="pi pi-angle-down" />
+        <select id="mois" formControlName="mois" class="p-inputtext w-full">
+          <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+        </select>
+      </p-iconField>
+      <small *ngIf="achatFormGroup.get('mois')?.invalid" class="p-error block">
+        Le mois est obligatoire.
+      </small>
+    </div>
+
+    <!-- Justificatif Field -->
+    <div class="field">
+      <label  class="block font-bold mb-2">Justificatif</label>
+
+      <p-fileUpload
+        [files]="filesArray"
+        showUploadButton="false"
+        (onRemove)="onRemoveHandle()"
+        fileLimit="1"
+        chooseLabel="Choisir"
+        cancelLabel="Annuler"
+        customUpload="true"
+        required="true"
+        (onSelect)="onFileSelected($event)"
+        maxFileSize="1000000">
+        <ng-template pTemplate="content">
+          <ul *ngIf="uploadedFile">
+            <li *ngIf="uploadedFile">
+              {{ uploadedFile.name }} - {{ uploadedFile.size }} bytes
+            </li>
+          </ul>
+        </ng-template>
+      </p-fileUpload>
+      <small *ngIf="achatFormGroup.get('file')?.invalid " class="p-error block">
+        Un justificatif est requis
+      </small>
+    </div>
+
+    <!-- Commentaire Field -->
+    <div class="field">
+      <label for="prix" class="block font-bold mb-2">commentaire</label>
+      <textarea  pInputText type="text" id="commentaire" formControlName="commentaire" class="w-full">
+      </textarea>
+      <small *ngIf="achatFormGroup.get('commentaire')?.invalid" class="p-error block">
+        <span *ngIf="achatFormGroup.get('commentaire')?.errors?.['maxlength']">Ne dépassez pas 120 caractère</span>
+      </small>
+    </div>
+
+    <!-- Save Button -->
+    <div class="d-flex">
+      <button
+        type="submit"
+        (click)="handleEditAchat()"
+        class="p-button p-component p-button-outlined align-self-center ">
+        Save
+      </button>
+    </div>
+  </form>
+</p-card>
+
+
+
+
 <div class="container mt-3 col-md-6 offset-md-3" >
   <form [formGroup]="achatFormGroup" *ngIf="achatFormGroup">
     <div class="mb-3">

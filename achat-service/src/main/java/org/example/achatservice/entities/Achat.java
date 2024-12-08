@@ -5,6 +5,9 @@ import jdk.jfr.Timestamp;
 import lombok.*;
 import org.example.achatservice.model.User;
 import org.example.achatservice.repository.UtilisateurRepository;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.util.Date;
 
 @Entity
 @NoArgsConstructor @AllArgsConstructor @Getter @Setter @Builder
@@ -16,11 +19,13 @@ public class Achat {
     private String userid;
     private Boolean valide;
     private String justifId;
-    @Timestamp
-    private String dateSaisie;
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    private Date dateSaisie;
     private String mois;
     private String type;
     private String commentaire;
+    private String commentaireRH;
     @ManyToOne
     @JoinColumn(name = "userid", referencedColumnName = "id", insertable = false, updatable = false)
     private Utilisateur utilisateur;

@@ -10,6 +10,7 @@ export interface Achat{
   mois:string;
   type:string;
   commentaire:string;
+  commentaireRH:string;
 
 }
 

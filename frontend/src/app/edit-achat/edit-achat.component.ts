@@ -84,8 +84,11 @@ export class EditAchatComponent implements OnInit{
     this.filesArray=[]
   }
 
-  onFileSelected($event: FileSelectEvent) {
-
+  onFileSelected(event: FileSelectEvent) {
+    if (event.files && event.files.length > 0) {
+      this.uploadedFile = event.files[0];
+      this.achatFormGroup.patchValue({file:this.uploadedFile})
+    }
   }
   onDownload(a: Achat): void {
     const url = `http://localhost:8082/getfile/${a.userid}/2024/${a.justifId}`;

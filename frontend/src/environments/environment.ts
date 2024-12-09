@@ -1,4 +1,4 @@
 export const environment = {
     production: false,
-    apiBaseUrl: 'http://localhost:8888/api/achats', // Default value
+    apiBaseUrl: 'http://localhost:8082/api/achats', // Default value
 };

@@ -10,11 +10,11 @@ export class UploadFileService {
   }
 
   pushFileToStorage(fileFormData: FormData): Observable<HttpEvent<{}>> {
-;
     const newRequest = new HttpRequest('POST', 'http://localhost:8082/savefile', fileFormData, {
       reportProgress: true,
       responseType: 'text'
     });
     return this.https.request(newRequest);
   }
+
 }

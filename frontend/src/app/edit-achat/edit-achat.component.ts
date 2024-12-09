@@ -12,6 +12,7 @@ import {InputIconModule} from "primeng/inputicon";
 import {InputTextModule} from "primeng/inputtext";
 import {PrimeTemplate} from "primeng/api";
 import {HttpClient} from "@angular/common/http";
+import {UploadFileService} from "../service/upload-file.service";
 
 @Component({
   selector: 'app-edit-achat',
@@ -40,7 +41,7 @@ export class EditAchatComponent implements OnInit{
   typesAchats:string[]=['vélo', 'clavier','souris']
   uploadedFile: File | null = null;
   filesArray:File[]=[];
-  constructor(private fb:FormBuilder, private achatservice:AchatService, private route:ActivatedRoute, private router:Router, private http:HttpClient) {
+  constructor(private fb:FormBuilder, private achatservice:AchatService, private route:ActivatedRoute, private router:Router, private http:HttpClient, private uploadservice:UploadFileService) {
     this.route.params.subscribe(data=>{
       this.achatId=data['id'];
     })
@@ -52,8 +53,23 @@ export class EditAchatComponent implements OnInit{
       ...this.achatFormGroup.value
     };
     this.achatservice.updateAchat(achatData).subscribe(data=>{
-      this.router.navigateByUrl("/achats")
+      this.submitFile(data);
     });
+  }
+  submitFile(saisie:Achat) {
+    if (this.uploadedFile) {
+      const formData = new FormData();
+      formData.append('file', this.uploadedFile);
+      formData.append('userId', this.currentAchat.userid);
+      const annee= new Date().getFullYear();
+      formData.append('year',  annee.toString());
+      formData.append('justifId', saisie.justifId)
+
+      this.uploadservice.pushFileToStorage(formData).subscribe((response: any) => {
+        console.log("file upload : ",response);
+        this.router.navigateByUrl("/achats")
+      });
+    }
   }
 
   ngOnInit(): void {

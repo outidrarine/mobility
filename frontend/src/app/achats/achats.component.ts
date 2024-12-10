@@ -9,6 +9,7 @@ import {ButtonModule} from "primeng/button";
 import {TableModule} from "primeng/table";
 import {CardModule} from "primeng/card";
 import {TagModule} from "primeng/tag";
+import {UploadFileService} from "../service/upload-file.service";
 
 @Component({
   selector: 'app-achats',
@@ -25,7 +26,7 @@ import {TagModule} from "primeng/tag";
 })
 export class AchatsComponent implements OnInit{
   achats: Achat[] = [];
-  constructor(private router:Router, private achatservice:AchatService, private http:HttpClient) {
+  constructor(private router:Router, private achatservice:AchatService, private http:HttpClient, private uploadservice:UploadFileService) {
   }
   ngOnInit(): void {
     this.getAchats();
@@ -58,9 +59,8 @@ export class AchatsComponent implements OnInit{
   }
 
   onDownload(a: Achat) {
-    const url = `http://localhost:8082/getfile/${a.userid}/2024/${a.justifId}`;
 
-    this.http.get(url, { responseType: 'blob' }).subscribe({
+    this.uploadservice.download(a).subscribe({
       next: (response: Blob) => {
         saveAs(response, a.justifId); // Automatically downloads the file
 

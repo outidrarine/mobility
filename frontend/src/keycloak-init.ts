@@ -1,10 +1,12 @@
 import { KeycloakService } from 'keycloak-angular';
+import {keycloakapi} from '../assets/config.json'
+
 
 export function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
     keycloak.init({
       config: {
-        url: 'http://kfmd.dev.klee.lan.net:8080/',
+        url: keycloakapi,
         realm: 'mobility-realm',
         clientId: 'mobility-client'
       },

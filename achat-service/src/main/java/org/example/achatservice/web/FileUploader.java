@@ -1,5 +1,6 @@
 package org.example.achatservice.web;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -14,21 +15,26 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @Controller
 public class FileUploader {
 
-    private final Path rootLocation = Paths.get("D://mobility");
+    @Value("${fichiers.jsutificatifs.chemin.root}")
+    private String fichiersJustificatifsRoot;
 
-    @PostMapping("/savefile")
+
+    @PostMapping("/api/savefile")
     public ResponseEntity<String> handleFileUpload(
             @RequestParam("file") MultipartFile file,
             @RequestParam("userId") String userId,
             @RequestParam("justifId") String fileId,
             @RequestParam("year") String year) {
+
+        final Path rootLocation = Paths.get(fichiersJustificatifsRoot);
+
         String message;
 
         try {
@@ -44,7 +50,7 @@ public class FileUploader {
             Path targetFilePath = userYearPath.resolve(fileId);
 
             // Copy the file to the target location
-            Files.copy(file.getInputStream(), targetFilePath);
+            Files.copy(file.getInputStream(), targetFilePath, StandardCopyOption.REPLACE_EXISTING);
 
             message = "File successfully uploaded to: " + targetFilePath.toString();
             return ResponseEntity.status(HttpStatus.OK).body(message);
@@ -57,11 +63,13 @@ public class FileUploader {
     }
 
 
-    @GetMapping("getfile/{userId}/{year}/{fileName}")
+    @GetMapping("api/getfile/{userId}/{year}/{fileName}")
     public ResponseEntity<Resource> serveFile(
             @PathVariable String userId,
             @PathVariable String year,
             @PathVariable String fileName) {
+        final Path rootLocation = Paths.get(fichiersJustificatifsRoot);
+
         try {
             Path filePath = rootLocation.resolve(userId).resolve(year).resolve(fileName);
             Resource file = new UrlResource(filePath.toUri());

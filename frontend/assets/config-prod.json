@@ -1,0 +1,5 @@
+{
+
+  "keycloakapi": "http://kfmd.dev.klee.lan.net:8080/",
+  "apiUrl": "http://kfmd.dev.klee.lan.net:8082/api/"
+}

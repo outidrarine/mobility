@@ -9,18 +9,19 @@ import {AvatarModule} from "primeng/avatar";
 import {MenuItem} from "primeng/api";
 import {BrowserModule} from "@angular/platform-browser";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {ButtonDirective} from "primeng/button";
+import {Button, ButtonDirective} from "primeng/button";
 import {Menu, MenuModule} from "primeng/menu";
+import {CardModule} from "primeng/card";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, MenubarModule, NgClass, BadgeModule, AvatarModule, NgIf, ButtonDirective, MenuModule],
+  imports: [RouterOutlet, RouterLink, MenubarModule, NgClass, BadgeModule, AvatarModule, NgIf, ButtonDirective, MenuModule, CardModule, Button],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit{
-  title = 'frontend';
+  title = 'KFMD | Forfait Mobilité Durable';
   public profile:any;
   items: MenuItem[] | undefined;
   constructor(public keycloakservice:KeycloakService) {
@@ -28,7 +29,8 @@ export class AppComponent implements OnInit{
     this.items = [
       {
         label: 'Home',
-        icon: 'pi pi-home'
+        icon: 'pi pi-home',
+        routerLink:'/'
       },
       {
         label: 'Achats',

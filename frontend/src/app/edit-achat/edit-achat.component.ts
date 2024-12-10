@@ -107,9 +107,8 @@ export class EditAchatComponent implements OnInit{
     }
   }
   onDownload(a: Achat): void {
-    const url = `http://localhost:8082/getfile/${a.userid}/2024/${a.justifId}`;
 
-    this.http.get(url, { responseType: 'blob' }).subscribe({
+    this.uploadservice.download(a).subscribe({
       next: (response: Blob) => {
         // Convert the Blob to a File
         this.uploadedFile = new File([response], a.justifId, { type: response.type });

@@ -1,19 +1,15 @@
 package org.example.achatservice.entities;
 
 import jakarta.persistence.*;
-import jdk.jfr.Timestamp;
 import lombok.*;
-import org.example.achatservice.model.User;
-import org.example.achatservice.repository.UtilisateurRepository;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
 @Entity
 @NoArgsConstructor @AllArgsConstructor @Getter @Setter @Builder
-public class Achat {
+public class SaisieKm {
     @Id @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
     private String userid;
     private Boolean valide;
     private String justifId;
@@ -27,7 +23,8 @@ public class Achat {
     @ManyToOne
     @JoinColumn(name = "userid", referencedColumnName = "id", insertable = false, updatable = false)
     private Utilisateur utilisateur;
-    // Achats
-    private String objet;
-    private double prix;
+    private String id;
+    // Abonnement
+    private String km;
+
 }

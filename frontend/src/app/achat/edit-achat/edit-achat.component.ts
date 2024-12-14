@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {AchatService} from "../service/achat.service";
+import {AchatService} from "../../service/achat.service";
 import {KeycloakService} from "keycloak-angular";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Achat} from "../model/achat.model";
+import {Achat} from "../../model/achat.model";
 import {NgForOf, NgIf} from "@angular/common";
 import {CardModule} from "primeng/card";
 import {FileSelectEvent, FileUpload, FileUploadModule} from "primeng/fileupload";
@@ -12,7 +12,7 @@ import {InputIconModule} from "primeng/inputicon";
 import {InputTextModule} from "primeng/inputtext";
 import {PrimeTemplate} from "primeng/api";
 import {HttpClient} from "@angular/common/http";
-import {UploadFileService} from "../service/upload-file.service";
+import {UploadFileService} from "../../service/upload-file.service";
 
 @Component({
   selector: 'app-edit-achat',

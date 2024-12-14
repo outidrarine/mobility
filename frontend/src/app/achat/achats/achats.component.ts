@@ -2,14 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {NgForOf} from "@angular/common";
 import {Router} from "@angular/router";
-import {AchatService} from "../service/achat.service";
-import {Achat} from "../model/achat.model";
+import {AchatService} from "../../service/achat.service";
+import {Achat} from "../../model/achat.model";
 import {saveAs} from 'file-saver'
 import {ButtonModule} from "primeng/button";
 import {TableModule} from "primeng/table";
 import {CardModule} from "primeng/card";
 import {TagModule} from "primeng/tag";
-import {UploadFileService} from "../service/upload-file.service";
+import {UploadFileService} from "../../service/upload-file.service";
 
 @Component({
   selector: 'app-achats',

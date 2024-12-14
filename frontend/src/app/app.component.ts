@@ -46,6 +46,12 @@ export class AppComponent implements OnInit{
         icon: 'pi pi-directions'
       },
       {
+        label: 'RH',
+        icon: 'pi pi-user-plus',
+        routerLink:'/rh',
+        visible: keycloakservice.isUserInRole('RH')
+      },
+      {
 
         label:this.keycloakservice.isLoggedIn()? this.keycloakservice?.getUsername():'',
 
@@ -65,7 +71,8 @@ export class AppComponent implements OnInit{
   ngOnInit(): void {
     if(this.keycloakservice.isLoggedIn()){
       this.keycloakservice.loadUserProfile().then(profile=>{
-        this.profile=profile
+        this.profile=profile;
+
       })
     }
 

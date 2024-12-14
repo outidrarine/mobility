@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators} from "@angular/forms";
 import {KeycloakService} from "keycloak-angular";
-import {AchatService} from "../service/achat.service";
+import {AchatService} from "../../service/achat.service";
 import {Router} from "@angular/router";
-import {UploadFileService} from "../service/upload-file.service";
-import {Achat} from "../model/achat.model";
+import {UploadFileService} from "../../service/upload-file.service";
+import {Achat} from "../../model/achat.model";
 import { v4 as uuidv4 } from 'uuid';
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {InputTextModule} from "primeng/inputtext";
@@ -46,8 +46,8 @@ export class FormAchatComponent implements OnInit{
   achatFormGroup! : FormGroup;
   userId!: string;
   userEmail!: string;
-  months:string[]=['Janvier','Février','Mars'];
-  typesAchats:string[]=['vélo', 'clavier','souris']
+  months:string[]=['Octobre','Novembre','Décembre'];
+  typesAchats:string[]=['Vélo (tout type)', 'Équipement de sécurité', 'Entretien et réparation de vélo']
   uploadedFile: File|null=null;
   submited:boolean=false;
 
@@ -104,7 +104,8 @@ export class FormAchatComponent implements OnInit{
     this.achatservice.saveAchat(achatData).subscribe(d => {
       console.log("post achat : ", d)
       this.submitFile(d);
-    });
+    },
+      error => console.log("error post : ", error));
   }
 
   onFileSelected(event: FileSelectEvent) {

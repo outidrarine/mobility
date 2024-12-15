@@ -1,0 +1,70 @@
+<div class="card m-3"> abonnements
+  <button
+    type="button"
+    icon="pi pi-plus"
+    pButton
+    pRipple
+    class="p-button-rounded p-button-text p-button-info"
+    (click)="handleNouveauAbonnement()">
+  </button>
+</div>
+<p-card   class="flex justify-content-center align-items-center mt-5 p-0">
+  <p-table [value]="Abonnements" [tableStyle]="{ 'min-width': '50rem' }" >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Mois</th>
+        <th>Type</th>
+        <th>Sujet</th>
+        <th>Montant</th>
+        <th>Validation RH</th>
+        <th>Commentaire</th>
+        <th>Commentaire RH</th>
+        <th>Pièce jointe</th>
+        <th>Modifier</th>
+        <th>Supprimer</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-abonnement>
+      <tr>
+        <td>{{ abonnement.mois }}</td>
+        <td>{{ abonnement.type }}</td>
+        <td>{{ abonnement.objet }}</td>
+        <td>{{ abonnement.prix }}</td>
+        <td><p-tag [value]="abonnement.valid??'En attente'" [severity]='severity(abonnement)' /></td>
+        <td>{{ abonnement.commentaire }}</td>
+        <td>{{ abonnement.commentaireRH }}</td>
+        <td>
+          <button
+            type="button"
+            pButton
+            pRipple
+            class="p-button-rounded p-button-text p-button-info"
+            icon="pi pi-download"
+            (click)="onDownload(abonnement)">
+          </button>
+        </td>
+        <td>
+          <button
+            type="button"
+            pButton
+            pRipple
+            icon="pi pi-pen-to-square"
+            class="p-button-rounded p-button-text p-button-info"
+            (click)="onEdit(abonnement)">
+          </button>
+        </td>
+        <td>
+          <button
+            type="button"
+            pButton
+            pRipple
+            class="p-button-rounded p-button-text p-button-danger"
+            icon="pi pi-trash"
+            (click)="onDelete(abonnement)">
+          </button>
+        </td>
+
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

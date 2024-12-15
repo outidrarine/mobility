@@ -1,0 +1,100 @@
+<p-card   styleClass="user-form" class="flex justify-content-center align-items-center mt-5 ">
+  <div >
+    <h3 class="text-center">Saisie d'un nouvel achat</h3>
+
+  </div>
+  <form [formGroup]="abonnementFormGroup" novalidate class=" p-5">
+    <!-- Objet Field -->
+    <div class="field">
+      <label for="objet" class="block font-bold mb-2">Objet</label>
+      <input pInputText type="text" id="objet" formControlName="objet" class="w-full">
+      <small *ngIf="submited && abonnementFormGroup.get('objet')?.invalid " class="p-error block">
+        <span *ngIf="abonnementFormGroup.get('objet')?.errors?.['required']">L'objet de l'achat est obligatoire.</span>
+      </small>
+    </div>
+
+    <!-- Prix Field -->
+    <div class="field">
+      <label for="prix" class="block font-bold mb-2">Prix</label>
+      <input pInputText type="text" id="prix" formControlName="prix" class="w-full">
+      <small *ngIf="submited && abonnementFormGroup.get('prix')?.invalid " class="p-error block">
+        <span *ngIf="abonnementFormGroup.get('prix')?.errors?.['required']">Le prix est obligatoire.</span>
+        <span *ngIf="abonnementFormGroup.get('prix')?.errors?.['pattern']">Le prix doit être un chiffre.</span>
+      </small>
+    </div>
+
+    <!-- Type Achat Field -->
+    <div class="field">
+      <label  class="block font-bold mb-2">Type Achat</label>
+      <p-iconField iconPosition="right">
+        <p-inputIcon styleClass="pi pi-angle-down" />
+        <select  id="type" formControlName="type" class="p-inputtext w-full">
+          <option *ngFor="let type of typesAbonnement" [value]="type" >{{ type }}</option>
+        </select>
+      </p-iconField>
+      <small *ngIf="submited &&abonnementFormGroup.get('type')?.invalid" class="p-error block">
+        Le type est obligatoire.
+      </small>
+    </div>
+
+    <!-- Mois Field -->
+    <div class="field">
+      <label for="mois" class="block font-bold mb-2">Mois</label>
+      <p-iconField iconPosition="right">
+        <p-inputIcon styleClass="pi pi-angle-down" />
+        <select id="mois" formControlName="mois" class="p-inputtext w-full">
+          <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+        </select>
+      </p-iconField>
+      <small *ngIf="submited && abonnementFormGroup.get('mois')?.invalid" class="p-error block">
+        Le mois est obligatoire.
+      </small>
+    </div>
+
+    <!-- Justificatif Field -->
+    <div class="field">
+      <label  class="block font-bold mb-2">Justificatif</label>
+
+      <p-fileUpload
+        showUploadButton="false"
+        (onRemove)="onRemoveHandle()"
+        fileLimit="1"
+        chooseLabel="Choisir"
+        cancelLabel="Annuler"
+        required="true"
+        (onSelect)="onFileSelected($event)"
+        maxFileSize="1000000">
+        <ng-template pTemplate="content">
+          <ul *ngIf="uploadedFile">
+            <li *ngIf="uploadedFile">
+              {{ uploadedFile.name }} - {{ uploadedFile.size }} bytes
+            </li>
+          </ul>
+        </ng-template>
+      </p-fileUpload>
+      <small *ngIf="submited && abonnementFormGroup.get('file')?.invalid " class="p-error block">
+        Un justificatif est requis
+      </small>
+    </div>
+
+    <!-- Commentaire Field -->
+    <div class="field">
+      <label for="prix" class="block font-bold mb-2">commentaire</label>
+      <textarea  pInputText type="text" id="commentaire" formControlName="commentaire" class="w-full">
+      </textarea>
+      <small *ngIf="submited && abonnementFormGroup.get('commentaire')?.invalid" class="p-error block">
+        <span *ngIf="abonnementFormGroup.get('commentaire')?.errors?.['maxlength']">Ne dépassez pas 120 caractère</span>
+      </small>
+    </div>
+
+    <!-- Save Button -->
+    <div class="d-flex">
+      <button
+        type="submit"
+        (click)="handleAddAbonnement()"
+        class="p-button p-component p-button-outlined align-self-center ">
+        Save
+      </button>
+    </div>
+  </form>
+</p-card>

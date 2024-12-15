@@ -39,10 +39,10 @@ import {InputIconModule} from "primeng/inputicon";
     IconFieldModule,
     InputIconModule
   ],
-  templateUrl: './form-achat.component.html',
-  styleUrl: './form-achat.component.css'
+  templateUrl: './new-achat.component.html',
+  styleUrl: './new-achat.component.css'
 })
-export class FormAchatComponent implements OnInit{
+export class NewAchatComponent implements OnInit{
   achatFormGroup! : FormGroup;
   userId!: string;
   userEmail!: string;

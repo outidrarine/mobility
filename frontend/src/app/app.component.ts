@@ -43,7 +43,8 @@ export class AppComponent implements OnInit{
       },
       {
         label: 'Saisie Abonnement',
-        icon: 'pi pi-directions'
+        icon: 'pi pi-directions',
+        routerLink:'/abonnements'
       },
       {
         label: 'RH',

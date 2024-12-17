@@ -1,1 +1,158 @@
-<p>edit-abonnement works!</p>
+<p-card *ngIf="abonnementFormGroup"  styleClass="user-form" class="flex justify-content-center align-items-center mt-5 ">
+  <div >
+    <h3 class="text-center">Saisie d'un nouvel achat</h3>
+
+  </div>
+  <form [formGroup]="abonnementFormGroup" novalidate class=" p-5">
+    <!-- Mois Field -->
+    <div class="field">
+      <label for="mois" class="block font-bold mb-2">Mois</label>
+      <p-iconField iconPosition="right">
+        <p-inputIcon styleClass="pi pi-angle-down" />
+        <select id="mois" formControlName="mois" class="p-inputtext w-full">
+          <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+        </select>
+      </p-iconField>
+      <small *ngIf="submited && abonnementFormGroup.get('mois')?.invalid" class="p-error block">
+        Le mois est obligatoire.
+      </small>
+    </div>
+
+    <!-- Type Achat Field -->
+    <div class="field">
+      <label  class="block font-bold mb-2">Type Abonnement</label>
+      <p-iconField iconPosition="right">
+        <p-inputIcon styleClass="pi pi-angle-down" />
+        <select  id="type" formControlName="type" class="p-inputtext w-full">
+          <option *ngFor="let type of typesAbonnement" [value]="type" >{{ type }}</option>
+        </select>
+      </p-iconField>
+      <small *ngIf="submited &&abonnementFormGroup.get('type')?.invalid" class="p-error block">
+        Le type est obligatoire.
+      </small>
+    </div>
+
+    <!-- Ville -->
+    <div class="field">
+      <label  class="block font-bold mb-2">Ville d'Abonnement</label>
+      <p-iconField iconPosition="right">
+        <p-inputIcon styleClass="pi pi-angle-down" />
+        <select  id="Villes" formControlName="ville" class="p-inputtext w-full">
+          <option *ngFor="let ville of Villes" [value]="ville" >{{ ville }}</option>
+        </select>
+      </p-iconField>
+      <small *ngIf="submited && abonnementFormGroup.get('ville')?.invalid" class="p-error block">
+        La ville est obligatoire.
+      </small>
+    </div>
+
+    <!-- modeAbonnement Field -->
+    <div class="field">
+      <label  class="block font-bold mb-2">Modes d'Abonnement</label>
+      <p-iconField iconPosition="right">
+        <p-inputIcon styleClass="pi pi-angle-down" />
+        <select  id="modes" formControlName="modeAbonnement" class="p-inputtext w-full">
+          <option *ngFor="let mode of modes" [value]="mode" >{{ mode }}</option>
+        </select>
+      </p-iconField>
+      <small *ngIf="submited && abonnementFormGroup.get('modeAbonnement')?.invalid" class="p-error block">
+        La ville est obligatoire.
+      </small>
+    </div>
+
+    <!-- montant Field -->
+    <div class="field">
+      <label for="montant" class="block font-bold mb-2">Montant Abonnement</label>
+      <input pInputText type="text" id="montant" formControlName="montant" class="w-full">
+      <small *ngIf="submited && abonnementFormGroup.get('montant')?.invalid " class="p-error block">
+        <span *ngIf="abonnementFormGroup.get('montant')?.errors?.['required']">Le montant est obligatoire.</span>
+      </small>
+    </div>
+    <!-- dateDebutValidete Field -->
+    <div class="field">
+      <label for="dateDebutValidete" class="block font-bold mb-2">Date Début Abonnement</label>
+      <p-calendar
+        ngModelGroup="formControlName"
+        formControlName="dateDebutValidete"
+        id="dateDebutValidete"
+        [iconDisplay]="'input'"
+        [showIcon]="true" />
+      <small *ngIf="submited && abonnementFormGroup.get('dateDebutValidete')?.invalid " class="p-error block">
+        <span *ngIf="abonnementFormGroup.get('dateDebutValidete')?.errors?.['required']">La date début est obligatoire.</span>
+      </small>
+    </div>
+
+    <!-- dateFinValidite Field -->
+    <div class="field">
+      <label for="dateFinValidite" class="block font-bold mb-2">Date Fin Abonnement</label>
+      <div class="w-full">
+        <p-calendar
+          formControlName="dateFinValidite"
+          id="dateFinValidite"
+          class="w-full"
+          [iconDisplay]="'input'"
+          [showIcon]="true"
+          inputId="dateFinValidite" />
+      </div>
+      <small *ngIf="submited && abonnementFormGroup.get('dateFinValidite')?.invalid " class="p-error block">
+        <span *ngIf="abonnementFormGroup.get('dateFinValidite')?.errors?.['required']">La date fin est obligatoire.</span>
+      </small>
+    </div>
+
+    <!-- Quantité Field -->
+    <div class="field">
+      <label for="quantite" class="block font-bold mb-2">Quantité</label>
+      <input pInputText type="text" id="quantite" formControlName="quantite" class="w-full">
+      <small *ngIf="submited && abonnementFormGroup.get('quantite')?.invalid " class="p-error block">
+        <span *ngIf="abonnementFormGroup.get('quantite')?.errors?.['required']">La quantité fin est obligatoire.</span>
+      </small>
+    </div>
+
+    <!-- Justificatif Field -->
+    <div class="field">
+      <label  class="block font-bold mb-2">Justificatif</label>
+
+      <p-fileUpload
+        showUploadButton="false"
+        (onRemove)="onRemoveHandle()"
+        fileLimit="1"
+        chooseLabel="Choisir"
+        cancelLabel="Annuler"
+        required="true"
+        (onSelect)="onFileSelected($event)"
+        maxFileSize="1000000">
+        <ng-template pTemplate="content">
+          <ul *ngIf="filesArray[0]">
+            <li *ngIf="filesArray[0]">
+              {{ filesArray[0].name }} - {{ filesArray[0].size }} bytes
+            </li>
+          </ul>
+        </ng-template>
+      </p-fileUpload>
+      <small *ngIf="submited && abonnementFormGroup.get('file')?.invalid " class="p-error block">
+        Un justificatif est requis
+      </small>
+    </div>
+
+    <!-- Commentaire Field -->
+    <div class="field">
+      <label for="commentaire" class="block font-bold mb-2">commentaire</label>
+      <textarea  pInputText type="text" id="commentaire" formControlName="commentaire" class="w-full">
+      </textarea>
+      <small *ngIf="submited && abonnementFormGroup.get('commentaire')?.invalid" class="p-error block">
+        <span *ngIf="abonnementFormGroup.get('commentaire')?.errors?.['maxlength']">Ne dépassez pas 120 caractère</span>
+      </small>
+    </div>
+
+
+    <!-- Save Button -->
+    <div class="d-flex">
+      <button
+        type="submit"
+        (click)="handlePost()"
+        class="p-button p-component p-button-outlined align-self-center ">
+        Save
+      </button>
+    </div>
+  </form>
+</p-card>

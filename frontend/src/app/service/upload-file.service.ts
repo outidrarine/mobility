@@ -20,7 +20,7 @@ export class UploadFileService {
     return this.http.request(newRequest);
   }
 
-  download(a:Achat):Observable<any>{
+  download(a:any):Observable<any>{
     return this.http.get(this.apiUrl+`getfile/${a.userid}/2024/${a.justifId}`, { responseType: 'blob' }); //http://localhost:8082/getfile/${a.userid}/2024/${a.justifId}
   }
 

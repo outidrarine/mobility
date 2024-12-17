@@ -10,6 +10,7 @@ import java.util.Date;
 @NoArgsConstructor @AllArgsConstructor @Getter @Setter @Builder
 public class Abonnement {
     @Id @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
     private String userid;
     private Boolean valide;
     private String justifId;
@@ -23,11 +24,9 @@ public class Abonnement {
     @ManyToOne
     @JoinColumn(name = "userid", referencedColumnName = "id", insertable = false, updatable = false)
     private Utilisateur utilisateur;
-    private String id;
     // Abonnement
     private String ville;
     private String modeAbonnement;
-    private String objet;
     private double montant;
     private Date dateDebutValidete;
     private Date dateFinValidite;

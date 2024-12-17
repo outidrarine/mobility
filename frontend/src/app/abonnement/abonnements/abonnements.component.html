@@ -9,12 +9,11 @@
   </button>
 </div>
 <p-card   class="flex justify-content-center align-items-center mt-5 p-0">
-  <p-table [value]="Abonnements" [tableStyle]="{ 'min-width': '50rem' }" >
+  <p-table [value]="abonnements" [tableStyle]="{ 'min-width': '50rem' }" >
     <ng-template pTemplate="header">
       <tr>
         <th>Mois</th>
         <th>Type</th>
-        <th>Sujet</th>
         <th>Montant</th>
         <th>Validation RH</th>
         <th>Commentaire</th>
@@ -28,8 +27,7 @@
       <tr>
         <td>{{ abonnement.mois }}</td>
         <td>{{ abonnement.type }}</td>
-        <td>{{ abonnement.objet }}</td>
-        <td>{{ abonnement.prix }}</td>
+        <td>{{ abonnement.montant }}</td>
         <td><p-tag [value]="abonnement.valid??'En attente'" [severity]='severity(abonnement)' /></td>
         <td>{{ abonnement.commentaire }}</td>
         <td>{{ abonnement.commentaireRH }}</td>

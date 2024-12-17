@@ -13,6 +13,7 @@ import {InputTextModule} from "primeng/inputtext";
 import {PrimeTemplate} from "primeng/api";
 import {HttpClient} from "@angular/common/http";
 import {UploadFileService} from "../../service/upload-file.service";
+import {v4 as uuidv4} from "uuid";
 
 @Component({
   selector: 'app-edit-achat',
@@ -34,35 +35,44 @@ import {UploadFileService} from "../../service/upload-file.service";
 })
 export class EditAchatComponent implements OnInit{
   achatFormGroup!: FormGroup;
-  achatId!:String;
+  achatId:String|null=null;
   currentAchat!:Achat;
-
-  months:string[]=['Janvier','Février','Mars'];
-  typesAchats:string[]=['vélo', 'clavier','souris']
-  uploadedFile: File | null = null;
+  userId!: string;
+  months:string[]=['Octobre','Novembre','Décembre'];
+  typesAchats:string[]=['Vélo (tout type)', 'Équipement de sécurité', 'Entretien et réparation de vélo']
+  submited:boolean=false;
   filesArray:File[]=[];
-  constructor(private fb:FormBuilder, private achatservice:AchatService, private route:ActivatedRoute, private router:Router, private http:HttpClient, private uploadservice:UploadFileService) {
+  constructor(private fb:FormBuilder, private achatservice:AchatService, private route:ActivatedRoute, private router:Router, private uploadservice:UploadFileService, private keycloakService:KeycloakService) {
     this.route.params.subscribe(data=>{
       this.achatId=data['id'];
     })
   }
 
-  handleEditAchat() {
+  handlePost() {
+    const fileUUID = uuidv4();
+    const fileExtension = this.filesArray[0]?.name.split('.').pop();
     const achatData: Achat = {
       ...this.currentAchat,
-      ...this.achatFormGroup.value
+      ...this.achatFormGroup.value,
+      userid: this.userId,
+      justifId: this.currentAchat?.justifId ?? `${fileUUID}.${fileExtension}`
     };
-    this.achatservice.updateAchat(achatData).subscribe(data=>{
-      this.submitFile(data);
-    });
+
+    this.submited=false;
+    if(this.achatFormGroup.valid){
+      (this.achatId ? this.achatservice.updateAchat(achatData) : this.achatservice.saveAchat(achatData)).subscribe(data=>{
+        this.submitFile(data);
+      });
+    }else{
+      this.submited=true;
+    }
   }
   submitFile(saisie:Achat) {
-    if (this.uploadedFile) {
+    if (this.filesArray[0]) {
       const formData = new FormData();
-      formData.append('file', this.uploadedFile);
-      formData.append('userId', this.currentAchat.userid);
-      const annee= new Date().getFullYear();
-      formData.append('year',  annee.toString());
+      formData.append('file', this.filesArray[0]);
+      formData.append('userId', this.userId);
+      formData.append('year',  new Date().getFullYear().toString());
       formData.append('justifId', saisie.justifId)
 
       this.uploadservice.pushFileToStorage(formData).subscribe((response: any) => {
@@ -73,46 +83,51 @@ export class EditAchatComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.achatservice.getAchat(this.achatId).subscribe({
+    this.achatId ? this.achatservice.getAchat(this.achatId).subscribe({
         next: (data:Achat) =>{
           this.currentAchat=data;
-          this.achatFormGroup=this.fb.group({
-            objet:this.fb.control(this.currentAchat.objet, [Validators.required, Validators.minLength(4)]),
-            prix:this.fb.control(this.currentAchat.prix, [Validators.required, Validators.minLength(2)]),
-            file: this.fb.control(this.uploadedFile, [Validators.required]),
-            mois:this.fb.control(this.currentAchat.mois,[Validators.required]),
-            type:this.fb.control(this.currentAchat.type,[Validators.required]),
-            commentaire:this.fb.control(this.currentAchat.commentaire,[Validators.maxLength(120)]),
-
-          });
+          this.initialiseForm();
           this.onDownload(this.currentAchat);
 
         },
         error : err =>{
           console.log("une erreur est survenue", err);
         }
-    })
+    }):this.initialiseForm();
 
+    this.keycloakService.loadUserProfile().then((profile) => {
+      this.userId = profile.id || '';
+    });
+  }
+
+  private initialiseForm() {
+    return this.achatFormGroup = this.fb.group({
+      objet: this.fb.control(this.currentAchat?.objet, [Validators.required, Validators.minLength(4)]),
+      prix: this.fb.control(this.currentAchat?.prix, [Validators.required, Validators.minLength(2)]),
+      file: this.fb.control(this.filesArray[0], [Validators.required]),
+      mois: this.fb.control(this.currentAchat?.mois, [Validators.required]),
+      type: this.fb.control(this.currentAchat?.type, [Validators.required]),
+      commentaire: this.fb.control(this.currentAchat?.commentaire, [Validators.maxLength(120)]),
+
+    });
   }
 
   onRemoveHandle() {
-    this.uploadedFile=null
     this.filesArray=[]
   }
 
   onFileSelected(event: FileSelectEvent) {
     if (event.files && event.files.length > 0) {
-      this.uploadedFile = event.files[0];
-      this.achatFormGroup.patchValue({file:this.uploadedFile})
+      this.filesArray.push(event.files[0]);
+      this.achatFormGroup.patchValue({file:this.filesArray[0]})
     }
   }
   onDownload(a: Achat): void {
 
     this.uploadservice.download(a).subscribe({
       next: (response: Blob) => {
-        // Convert the Blob to a File
-        this.uploadedFile = new File([response], a.justifId, { type: response.type });
-        this.achatFormGroup.patchValue({file:this.uploadedFile})
+        this.filesArray.push(new File([response], a.justifId, { type: response.type }))
+        this.achatFormGroup.patchValue({file:this.filesArray[0]})
         this.filesArray=[new File([response], a.justifId, { type: response.type })];
       },
       error: (err) => {
